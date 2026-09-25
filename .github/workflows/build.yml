@@ -16,6 +16,7 @@ jobs:
         with:
           combine: true
           target: Android64
+          sdk: nightly
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:

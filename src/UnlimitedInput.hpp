@@ -7,7 +7,7 @@
 
 using namespace geode::prelude;
 
-class UnlimitedInput : public CCNode {
+class UnlimitedInput : public CCNode, public TextInputDelegate {
 protected:
     CCTextInputNode* m_input = nullptr;
     std::function<void(float)> m_onChange;
@@ -36,11 +36,11 @@ public:
         return nullptr;
     }
 
-    void textChanged(CCTextInputNode* input) {
-        auto str = input->getString();
+    void textChanged(CCTextInputNode* input) override {
+        std::string str = input->getString();
         char* end = nullptr;
-        float value = std::strtof(str, &end);
-        if (end != str && m_onChange) {
+        float value = std::strtof(str.c_str(), &end);
+        if (end != str.c_str() && m_onChange) {
             m_onChange(value);
         }
     }

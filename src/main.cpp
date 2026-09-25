@@ -12,28 +12,22 @@ class $modify(UnlimitedSlider, Slider) {
     };
 
     bool init(CCNode* target, SEL_MenuHandler handler, const char* bar,
-              const char* thumbSprite, const char* thumbSpriteSelected,
-              const char* barCircleSprite) {
-        if (!Slider::init(target, handler, bar, thumbSprite,
-                           thumbSpriteSelected, barCircleSprite)) {
+              const char* groove, const char* thumb, const char* thumbSel,
+              float scale) {
+        if (!Slider::init(target, handler, bar, groove, thumb, thumbSel, scale)) {
             return false;
         }
 
-        auto thumb = m_touchLogic ? m_touchLogic->m_slider : nullptr;
-        float initial = thumb ? thumb->getValue() : 0.f;
+        auto thumbNode = m_touchLogic ? m_touchLogic->m_slider : nullptr;
+        float initial = thumbNode ? thumbNode->getValue() : 0.f;
 
         m_fields->input = UnlimitedInput::create(initial, [this](float v) {
             v = std::clamp(v, 0.f, 1.f);
-            if (m_touchLogic && m_touchLogic->m_slider) {
-                m_touchLogic->m_slider->setValue(v);
-            }
-            if (m_target && m_handler) {
-                (m_target->*m_handler)(this);
-            }
+            this->setValue(v);
+            this->sliderEnded();
         });
 
         if (m_fields->input) {
-            this->setPosition(this->getPosition());
             m_fields->input->setPosition({this->getContentSize().width / 2.f, 0.f});
             this->addChild(m_fields->input, 100);
 

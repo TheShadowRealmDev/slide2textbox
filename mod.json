@@ -1,7 +1,7 @@
 {
   "geode": "4.7.0",
   "gd": {
-    "android64": "2.2074",
+    "android": "2.2074",
     "win": "2.2074",
     "mac": "2.2074",
     "ios": "2.2074"
@@ -10,7 +10,5 @@
   "id": "zothyyoutube.unlimited_sliders",
   "name": "Unlimited Sliders",
   "developer": "ZothyYoutube",
-  "description": "Substitui sliders do editor por caixas de texto numericas sem limite de min/max.",
-  "gd_platforms": ["android64", "win", "mac", "ios"],
-  "tags": ["editor", "enhancement"]
+  "description": "Substitui sliders do editor por caixas de texto numericas sem limite de min/max."
 }

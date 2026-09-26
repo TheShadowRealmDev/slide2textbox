@@ -32,7 +32,10 @@ class $modify(UnlimitedSlider, Slider) {
             this->addChild(m_fields->input, 100);
 
             this->setTouchEnabled(false);
-            if (m_touchLogic) m_touchLogic->setVisible(false);
+            if (m_touchLogic) {
+                m_touchLogic->setVisible(false);
+                m_touchLogic->setTouchEnabled(false);
+            }
             if (m_touchLogic && m_touchLogic->m_slider) {
                 m_touchLogic->m_slider->setVisible(false);
             }

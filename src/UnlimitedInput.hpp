@@ -16,11 +16,17 @@ protected:
         if (!CCNode::init()) return false;
         m_onChange = onChange;
 
-        m_input = CCTextInputNode::create(60.f, 30.f, "0", "chatFont.fnt");
+        auto bg = CCScale9Sprite::create("square02_001.png");
+        bg->setContentSize({70.f, 34.f});
+        bg->setColor({0, 0, 0});
+        bg->setOpacity(180);
+        this->addChild(bg);
+
+        m_input = CCTextInputNode::create(60.f, 30.f, "0", "bigFont.fnt");
         m_input->setString(numToString(initialValue));
         m_input->setDelegate(this);
-        this->addChild(m_input);
-        this->setContentSize(m_input->getContentSize());
+        this->addChild(m_input, 1);
+        this->setContentSize({70.f, 34.f});
 
         return true;
     }

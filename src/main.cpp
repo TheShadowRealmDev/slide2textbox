@@ -1,46 +1,30 @@
 #include <Geode/Geode.hpp>
-#include <Geode/modify/Slider.hpp>
-#include <Geode/binding/SliderThumb.hpp>
-#include <Geode/binding/SliderTouchLogic.hpp>
+#include <Geode/modify/SetupTimeWarpPopup.hpp>
 #include "UnlimitedInput.hpp"
 
 using namespace geode::prelude;
 
-class $modify(UnlimitedSlider, Slider) {
+class $modify(UnlimitedTimeWarp, SetupTimeWarpPopup) {
     struct Fields {
         UnlimitedInput* input = nullptr;
     };
 
-    bool init(CCNode* target, SEL_MenuHandler handler, const char* bar,
-              const char* groove, const char* thumb, const char* thumbSel,
-              float scale) {
-        if (!Slider::init(target, handler, bar, groove, thumb, thumbSel, scale)) {
-            return false;
-        }
+    bool init(EffectGameObject* triggerObj, CCArray* triggers) {
+        if (!SetupTimeWarpPopup::init(triggerObj, triggers)) return false;
 
-        auto thumbNode = m_touchLogic ? m_touchLogic->m_slider : nullptr;
-        float initial = thumbNode ? thumbNode->getValue() : 0.f;
+        if (m_timeWarpSlider) {
+            m_timeWarpSlider->setVisible(false);
+            m_timeWarpSlider->setTouchEnabled(false);
 
-        m_fields->input = UnlimitedInput::create(initial, [this](float v) {
-            v = std::clamp(v, 0.f, 1.f);
-            this->setValue(v);
-            this->sliderEnded();
-        });
+            m_fields->input = UnlimitedInput::create(m_timeWarpMod, [this](float v) {
+                m_timeWarpMod = v;
+                this->updateTimeWarp();
+                this->updateTimeWarpLabel();
+            });
 
-        if (m_fields->input) {
-            m_fields->input->setPosition({this->getContentSize().width / 2.f, 0.f});
-            this->addChild(m_fields->input, 100);
-
-            this->setTouchEnabled(false);
-            if (m_touchLogic) {
-                m_touchLogic->setVisible(false);
-                m_touchLogic->setTouchEnabled(false);
-            }
-            if (m_touchLogic && m_touchLogic->m_slider) {
-                m_touchLogic->m_slider->setVisible(false);
-            }
-            for (auto child : CCArrayExt<CCNode*>(this->getChildren())) {
-                if (child != m_fields->input) child->setVisible(false);
+            if (m_fields->input) {
+                m_fields->input->setPosition(m_timeWarpSlider->getPosition());
+                m_timeWarpSlider->getParent()->addChild(m_fields->input, 100);
             }
         }
 
